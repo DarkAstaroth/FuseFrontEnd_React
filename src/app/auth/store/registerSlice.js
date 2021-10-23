@@ -87,7 +87,7 @@ export const registerWithFirebase = (model) => async (dispatch) => {
 
 const initialState = {
   success: false,
-  errors: [],
+  errors: '',
 };
 
 const registerSlice = createSlice({
@@ -96,7 +96,7 @@ const registerSlice = createSlice({
   reducers: {
     registerSuccess: (state, action) => {
       state.success = true;
-      state.errors = [];
+      state.errors = '';
     },
     registerError: (state, action) => {
       state.success = false;

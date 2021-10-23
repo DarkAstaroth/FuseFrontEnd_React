@@ -17,6 +17,7 @@ import { submitLogin } from "app/auth/store/loginSlice";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
 import _ from "@lodash";
+import { showMessage } from "app/store/fuse/messageSlice";
 
 const Root = styled("div")(({ theme }) => ({
   "& .Login3-leftSection": {},
@@ -70,22 +71,21 @@ function LoginPage() {
 
   const [showPassword, setShowPassword] = useState(false);
 
-    // useEffect(() => {
-    //   setValue("email", "admin@fusetheme.com", {
-    //     shouldDirty: true,
-    //     shouldValidate: true,
-    //   });
-    //   setValue("password", "admin", { shouldDirty: true, shouldValidate: true });
-    // }, [reset, setValue, trigger]);
-
-  // useEffect(() => {
-  //   login.errors.forEach((error) => {
-  //     setError(error.type, {
-  //       type: "manual",
-  //       message: error.message,
-  //     });
-  //   });
-  // }, [login.errors, setError]);
+  useEffect(() => {
+    if (login.errors !== "") {
+      dispatch(
+        showMessage({
+          message: login.errors, //text or html
+          autoHideDuration: 6000, //ms
+          anchorOrigin: {
+            vertical: "top", //top bottom
+            horizontal: "center", //left center right
+          },
+          variant: "error", //success error info warning null
+        })
+      );
+    }
+  }, [login.errors, setError]);
 
   function onSubmit(model) {
     dispatch(submitLogin(model));

@@ -1,4 +1,3 @@
-import { authRoles } from "app/auth";
 import Error404Page from "./Error404Page";
 
 const Error404Config = {
@@ -23,7 +22,7 @@ const Error404Config = {
       },
     },
   },
-  auth: authRoles.onlyGuest,
+
   routes: [
     {
       path: "/404",

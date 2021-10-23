@@ -10,8 +10,9 @@ class JwtService extends FuseUtils.EventEmitter {
   }
 
   setInterceptors = () => {
-    axios.interceptors.response.use(
+    clientAxios.interceptors.response.use(
       (response) => {
+        console.log(response);
         return response;
       },
       (err) => {
@@ -51,39 +52,46 @@ class JwtService extends FuseUtils.EventEmitter {
 
   createUser = (data) => {
     return new Promise((resolve, reject) => {
-      clientAxios.post("/api/users/register", data).then((response) => {
-        console.log(response);
-        if (response.data.user) {
-          this.setSession(response.data.access_token);
-          resolve(response.data.user);
-        } else {
-          reject(response.data.error);
-        }
-      });
+      clientAxios
+        .post("/api/users/register", data)
+        .then((response) => {
+          if (response.data.user) {
+            this.setSession(response.data.access_token);
+            resolve(response.data.user);
+          } else {
+            reject(response.data.error);
+          }
+        })
+        .catch((error) => {
+          reject(error.response.data.msg);
+        });
     });
   };
 
   signInWithEmailAndPassword = (data) => {
     return new Promise((resolve, reject) => {
-      clientAxios.post("/api/auth/login", data).then((response) => {
-        if (response.data.user) {
-          this.setSession(response.data.access_token);
-          resolve(response.data.user);
-        } else {
-          reject(response.data.error);
-        }
-      });
+      clientAxios
+        .post("/api/auth/login", data)
+        .then((response) => {
+          console.log(response);
+          if (response.data.user) {
+            this.setSession(response.data.access_token);
+            resolve(response.data.user);
+          } else {
+            reject(response.data.error);
+          }
+        })
+        .catch((error) => {
+          reject(error.response.data.msg);
+        });
     });
   };
 
   signInWithToken = () => {
     return new Promise((resolve, reject) => {
-      axios
-        .get("/api/auth/access-token", {
-          data: {
-            access_token: this.getAccessToken(),
-          },
-        })
+      const access_token = this.getAccessToken();
+      clientAxios
+        .post("/api/auth/access-token", { access_token })
         .then((response) => {
           if (response.data.user) {
             this.setSession(response.data.access_token);

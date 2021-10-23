@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { submitRegister } from "app/auth/store/registerSlice";
 import * as yup from "yup";
 import _ from "@lodash";
+import { showMessage } from "app/store/fuse/messageSlice";
 
 const Root = styled("div")(({ theme }) => ({
   "& .Register3-leftSection": {},
@@ -73,12 +74,19 @@ function RegisterPage() {
   const { isValid, dirtyFields, errors } = formState;
 
   useEffect(() => {
-    authRegister.errors.forEach((error) => {
-      setError(error.type, {
-        type: "manual",
-        message: error.message,
-      });
-    });
+    if (authRegister.errors !== "") {
+      dispatch(
+        showMessage({
+          message: authRegister.errors, //text or html
+          autoHideDuration: 6000, //ms
+          anchorOrigin: {
+            vertical: "top", //top bottom
+            horizontal: "center", //left center right
+          },
+          variant: "info", //success error info warning null
+        })
+      );
+    }
   }, [authRegister.errors, setError]);
 
   function onSubmit(model) {
