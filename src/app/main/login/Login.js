@@ -188,10 +188,7 @@ function LoginPage() {
                   )}
                 />
 
-                <Link
-                  className="font-normal"
-                  to="/pages/auth/forgot-password-2"
-                >
+                <Link className="font-normal" to="/forgot-password">
                   Forgot Password?
                 </Link>
               </div>

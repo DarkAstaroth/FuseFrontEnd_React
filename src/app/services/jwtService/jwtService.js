@@ -12,7 +12,6 @@ class JwtService extends FuseUtils.EventEmitter {
   setInterceptors = () => {
     clientAxios.interceptors.response.use(
       (response) => {
-        console.log(response);
         return response;
       },
       (err) => {
@@ -73,7 +72,6 @@ class JwtService extends FuseUtils.EventEmitter {
       clientAxios
         .post("/api/auth/login", data)
         .then((response) => {
-          console.log(response);
           if (response.data.user) {
             this.setSession(response.data.access_token);
             resolve(response.data.user);
